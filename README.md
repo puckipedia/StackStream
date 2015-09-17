@@ -2,6 +2,9 @@
 
 StackStream is an esolang-y stack-based language with streams thrown in, because why not?
 
+# A tiny history
+After reading the exam requirements for the (simple) calculator, I found out there's nothing stopping me from making my own and having it use, e.g. rpn. I started making a small RPN language, and slowly grew it (even making a horrible implementation on my TI-84). Then, I started thinking 'what if I added a feature for functions?' and so I did. And because of the 'why not' factor, I decided to implement brainfuck, but hit a snag: I can't store the tape. So I added the streams and buffers. This is now StackStream.
+
 # Syntax
 The syntax of the language is very simple, it contains only five data types 
  (referred to as 'tokens'):
