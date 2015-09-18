@@ -42,7 +42,7 @@ namespace StackStream
         {
             "{ dup 1 dive swap { drop } { while } elseif } 'while def",
             "{ swap dup 2 dig = } 'compare def",
-            "{ dup 2 + dig dup 2 dig 1 + bury } 'dig' def",
+            "{ dup 1 + dig dup 2 dig bury } 'dig' def",
             "{ stack-count swap 1 dive stack-count = assert } 'stack-check def",
             "{ 1 - swap dup 2 dive swap dup { drop drop } { repeat } elseif } 'repeat def",
         };
