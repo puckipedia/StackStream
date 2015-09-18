@@ -38,7 +38,13 @@ namespace StackStream
             while (Pointer < Data.Length && (char.IsWhiteSpace(Data, Pointer) || Data[Pointer] == '#'))
             {
                 if (Data[Pointer] == '#')
-                    Pointer = Data.IndexOf('\n', Pointer);
+                {
+                    int index = Data.IndexOf('\n', Pointer);
+                    if (index < 0)
+                        Pointer = Data.Length;
+                    else
+                        Pointer = index + 1;
+                }
                 Pointer++;
             }
         }
