@@ -11,6 +11,7 @@ namespace StackStream
         static void Main(string[] args)
         {
             Executor exec = new Executor();
+
             while (true) // loop
             {
                 Console.Write(" {0} | ", exec.DataStack.ToString()); // print

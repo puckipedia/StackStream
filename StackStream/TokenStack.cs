@@ -51,7 +51,7 @@ namespace StackStream
 
         public void Bury(IToken token, int index)
         {
-            _tokens.Insert(index, token);
+            _tokens.Insert(Dive + index, token);
         }
 
         public override string ToString()

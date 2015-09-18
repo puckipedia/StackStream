@@ -35,8 +35,12 @@ namespace StackStream
 
         public void SkipWhitespace()
         {
-            while (Pointer < Data.Length && char.IsWhiteSpace(Data, Pointer))
+            while (Pointer < Data.Length && (char.IsWhiteSpace(Data, Pointer) || Data[Pointer] == '#'))
+            {
+                if (Data[Pointer] == '#')
+                    Pointer = Data.IndexOf('\n', Pointer);
                 Pointer++;
+            }
         }
 
         public string Parse()
@@ -61,7 +65,7 @@ namespace StackStream
         public string TakeUntilWhitespace()
         {
             int start = Pointer;
-            while (Pointer < Data.Length && !char.IsWhiteSpace(Data, Pointer) && Data[Pointer] != '}' && Data[Pointer] != '{')
+            while (Pointer < Data.Length && !char.IsWhiteSpace(Data, Pointer) && Data[Pointer] != '}' && Data[Pointer] != '{' && Data[Pointer] != '#')
                 Pointer++;
             return Data.Substring(start, Pointer - start);
         }

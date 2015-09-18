@@ -22,7 +22,7 @@ namespace StackStream.Streams
         public override byte Read()
         {
             if (_location >= _buffer.Length)
-                throw new Exception("Reading outside bounds!");
+                Array.Resize(ref _buffer, _location + 1);
             return _buffer[_location++];
         }
 
