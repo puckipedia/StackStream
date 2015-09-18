@@ -62,6 +62,13 @@ namespace StackStream.IRC
             writer.WriteLine("USER ENTER_ME 8 * :ENTER_ME");
             writer.WriteLine("JOIN #ENTER_ME");
 
+            Executor e = new Executor();
+            var stdio = new IRCStdIo();
+            e.Methods["stdinout"] = delegate (Executor exec)
+            {
+                exec.DataStack.Push(stdio);
+            };
+
             while (true)
             {
                 var msg = reader.ReadLine().Split(' ');
@@ -76,11 +83,17 @@ namespace StackStream.IRC
                     string message = string.Join(" ", msg.Skip(3)).Substring(1);
                     if (message.StartsWith("~{"))
                     {
-                        Executor e = new Executor();
-                        var stdio = new IRCStdIo();
-                        e.Methods["stdinout"] = delegate (Executor exec)
+                        stdio.Builder.Clear();
+                        e.CodeStack.Clear();
+                        e.DataStack.Clear();
+
+                        e.Methods["reset"] = delegate (Executor exec)
                         {
-                            exec.DataStack.Push(stdio);
+                            e = new Executor();
+                            e.Methods["stdinout"] = delegate (Executor execu)
+                            {
+                                execu.DataStack.Push(stdio);
+                            };
                         };
 
                         e.CodeStack.PushRange(Lexer.Parse(message.Substring(2)).Value);
