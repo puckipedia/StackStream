@@ -25,6 +25,12 @@ namespace StackStream
             _tokens.InsertRange(Dive, tokens);
         }
 
+        public void Clear()
+        {
+            Dive = 0;
+            _tokens.Clear();
+        }
+        
         public int Count
         {
             get

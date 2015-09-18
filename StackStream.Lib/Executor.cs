@@ -44,6 +44,7 @@ namespace StackStream
             "{ swap dup 2 dig = } 'compare def",
             "{ dup dup -1 * swap 1 + bury { dup 2 dig bury } dive } 'dig' def",
             "{ stack-count swap 1 dive stack-count = assert } 'stack-check def",
+            "{ 1 - swap dup 2 dive swap dup { drop drop } { repeat } elseif } 'repeat def",
         };
 
         public Dictionary<string, Method> Methods

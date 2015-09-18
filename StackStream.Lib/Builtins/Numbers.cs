@@ -40,6 +40,29 @@ namespace StackStream.Builtins
             exec.DataStack.Push(new Tokens.Number(a / b));
         }
 
+        [Function("|")]
+        public static void BitwiseOr(Executor exec)
+        {
+            var b = exec.DataStack.Pop<Tokens.Number>().Value;
+            var a = exec.DataStack.Pop<Tokens.Number>().Value;
+            exec.DataStack.Push(new Tokens.Number(a | b));
+        }
+
+        [Function("&")]
+        public static void BitwiseAnd(Executor exec)
+        {
+            var b = exec.DataStack.Pop<Tokens.Number>().Value;
+            var a = exec.DataStack.Pop<Tokens.Number>().Value;
+            exec.DataStack.Push(new Tokens.Number(a & b));
+        }
+
+        [Function("not")]
+        public static void BitwiseNot(Executor exec)
+        {
+            var b = exec.DataStack.Pop<Tokens.Number>().Value;
+            exec.DataStack.Push(new Tokens.Number(~b));
+        }
+
         [Function("=")]
         public static void Equals(Executor exec)
         {
