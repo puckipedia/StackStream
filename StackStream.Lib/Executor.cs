@@ -74,7 +74,6 @@ namespace StackStream
         public void Cycle()
         {
             var token = CodeStack.Pop<IToken>();
-            Debug.Write(token.ToString() + " ");
 
             if (token is Tokens.Method)
             {

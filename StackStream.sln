@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackStream", "StackStream\StackStream.csproj", "{722F3501-BC4F-4F5F-B3B1-C59935A51B5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackStream.Lib", "StackStream.Lib\StackStream.Lib.csproj", "{5102A053-44E2-4A06-94BD-058E9012449F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackStream.IRC", "StackStream.IRC\StackStream.IRC.csproj", "{8301DD4B-3F2E-4648-887F-AB60DC4DEC04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{722F3501-BC4F-4F5F-B3B1-C59935A51B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{722F3501-BC4F-4F5F-B3B1-C59935A51B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{722F3501-BC4F-4F5F-B3B1-C59935A51B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5102A053-44E2-4A06-94BD-058E9012449F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5102A053-44E2-4A06-94BD-058E9012449F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5102A053-44E2-4A06-94BD-058E9012449F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5102A053-44E2-4A06-94BD-058E9012449F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8301DD4B-3F2E-4648-887F-AB60DC4DEC04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8301DD4B-3F2E-4648-887F-AB60DC4DEC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8301DD4B-3F2E-4648-887F-AB60DC4DEC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8301DD4B-3F2E-4648-887F-AB60DC4DEC04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
