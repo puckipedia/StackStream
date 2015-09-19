@@ -22,5 +22,12 @@ namespace StackStream.Lib.Builtins
             var tokens = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
             exec.DataStack.Push(new Tokens.CodeBlock(tokens));
         }
+
+        [Function("from-codeblock")]
+        public static void FromCodeblock(Executor exec)
+        {
+            var tokens = exec.DataStack.Pop<Tokens.CodeBlock>().Value;
+            exec.DataStack.Push(new Tokens.PackedBlock(tokens));
+        }
     }
 }

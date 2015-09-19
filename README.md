@@ -73,6 +73,7 @@ note: offsets are calculated after popping arguments.
 - `def`: b:codeblock a:symbol → - Defines a to be a method, which will execute b.
 - `assert`: a:number → - If a is zero, errors
 - `to-codeblock`: a:packedblock → b:codeblock - Turns a into a codeblock, with the top of the stack being the first executed token.
+- `from-codeblock`: a:codeblock → b:packedblock - Turns a into a packedblock, with the top of the stack being the first executed token.
 - `parse`: a:packedblock → b - Parses the string contained in a into a token.
 
 - `pack`: ... N:number → a:packedblock - Packs the top N items in the stack into a packed block.
