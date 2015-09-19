@@ -19,6 +19,11 @@ namespace StackStream.Tokens
             Value = tokens.ToList();
         }
 
+        public string AsString()
+        {
+            return new string(Value.Select(a => (char)((Number)a).Value).ToArray());
+        }
+
         public IToken Duplicate()
         {
             return new PackedBlock(Value.Select(a => a.Duplicate()));

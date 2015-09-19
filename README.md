@@ -54,7 +54,8 @@ StackStreams contains a list of built-in methods, as those can't be represented
 
 note: offsets are calculated after popping arguments.
 
-- `(+ / - \*)`: a:number b:number → c:number - Calculates a +/-* b.
+- `(+ / - * mod | &)`: a:number b:number → c:number - Calculates a (+ / - \* mod | &) b.
+- `(< > <= >=)`: a: number b:number → c:number - Calculates a (> < >= <=) b.
 - `=`: a:number b:number → c:number - If a and b are equal, c is 1, else it is zero.
 
 - `dup`: a → a a - duplicates the top item on the stack.
@@ -62,7 +63,7 @@ note: offsets are calculated after popping arguments.
 - `dive`: a:codeblock N:number → - dives N items into the stack, and executes a. After a is done executing, dives back N items.
 - `dig`: b ... N:number → ... b - moves an item N items into the stack onto the top.
 - `bury`: ... a N:number → a ... - moves an item on top of the stack N items into the stack.
-- `stack-count`: → a:number - Counts the amount of items on the stack.
+- `count-stack`: → a:number - Counts the amount of items on the stack.
 - `swap`: a b → b a - swaps the top two items on the stack.
 
 - `if`: cc:number b:codeblock → - if cc is non-zero, executes b. Else, just pops it from the stack.
@@ -71,9 +72,12 @@ note: offsets are calculated after popping arguments.
 - `exec`: a:codeblock → - Executes a.
 - `def`: b:codeblock a:symbol → - Defines a to be a method, which will execute b.
 - `assert`: a:number → - If a is zero, errors
+- `to-codeblock`: a:packedblock → b:codeblock - Turns a into a codeblock, with the top of the stack being the first executed token.
+- `parse`: a:packedblock → b - Parses the string contained in a into a token.
+
 - `pack`: ... N:number → a:packedblock - Packs the top N items in the stack into a packed block.
 - `unpack`: a:packedblock → ... N:number - Unpacks the packed block, and pushes the size of it on top.
-- `pack-size`: a:packedblock → N:number - pushes the amount of items inside the packed block.
+- `count-packed`: a:packedblock → N:number - pushes the amount of items inside the packed block.
 
 - `stdinout`: → a:stream - pushes a stream referencing stdin / stdout to the stack.
 - `read-stream`: a:stream → b:number - reads of the top stream, and returns the value.
@@ -92,31 +96,48 @@ Depending on the interpreter, `new-tcpstream`, `read-file` and `write-file` migh
 - `read-file`: a:packedblock → b:stream - opens the file represented by a, read-only.
 - `write-file`: a:packedblock → b:stream - opens the file represented by a, read-write.
 
-
-
 # Convenience methods
 Some convenience methods are presented, implemented in StackStream itself:
 
 `while`: a:codeblock → - Executes code block a, and checks the top value of the stack afterwards. If non-zero, loop. (do { } while())
-
     { dup 1 dive swap { drop } { while } elseif } 'while def
 
 `compare`: a:number b:number → a c:number - Compares a to b, and pushes the result value, while keeping value a intact.
-
     { swap dup 2 dig = } 'compare def
 
 `dig'`: a ... N:number → a ... a - Digs up an item, but keeps a duplicate of it on its original position
+    { dup 1 + dig dup 2 dig bury } 'dig' def
 
-    { dup dup -1 * swap 1 + bury { dup 2 dig bury } dive } 'dig' def
+`repeat`: a:codeblock N:number → ... - Executes a N times.
+    { dup { drop drop } { 1 - swap dup 2 dive swap repeat } elseif } 'repeat def
 
 `stack-check`: a:codeblock → - Executes a, but makes sure the stack doesn't change size.
-
     { stack-count swap 1 dive stack-count = assert } 'stack-check def
+
+`dropn`: ... N:number → - removes N items from the top of the stack.
+    { { drop } swap repeat } 'dropn def
+    
+Some other convenience methods for working with packed blocks:
+
+`concat-packed`: a:packedblock b:packedblock → c:packedblock - concatenates b at the end (bottom) of a
+    { swap { unpack } 1 dive swap { unpack } 1 dive + pack } 'concat-packed def
+
+`bury-packed`: a:packedblock b:number c → d:packedblock - sets the item at b to be c
+    { { unpack } 2 dive swap dup 3 + { drop } swap dive 1 + bury pack } 'bury-packed def
+
+`dig'-packed`: a:packedblock b:number → c - runs dig' inside the packed block, but keeps the original entry.
+    { { unpack } 1 dive 1 + dig { 1 - dropn } 1 dive } 'dig'-packed def
+
+`new-packed`: N:number → b:packedblock - makes a new packed block, filled with N placeholders
+    { dup { { 'uninitialised-element } swap repeat } 1 dive pack } 'new-packed def
+
+`shrink-packed`: a:packedblock N:number → b:packedblock - Removes the bottom N items from the packed block. 
+    { { unpack } 1 dive dup { - pack } 1 dive swap { dropn } 1 dive } 'shrink-packed def
 
 # Example code
 `cat`: (Only gets stdinout once)
 
-    stdinout { dup dup dup read-stream write-stream eof-stream } while
+    stdinout { dup dup dup read-stream write-stream eof-stream not } while
 
 Note: any code might be incorrect.
 (that's a feature, not a bug)

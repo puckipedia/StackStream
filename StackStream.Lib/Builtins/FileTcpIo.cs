@@ -98,24 +98,19 @@ namespace StackStream.Lib.Builtins
         public static void NewTcpStream(Executor exec)
         {
             var port = (short)exec.DataStack.Pop<Tokens.Number>().Value;
-            var data = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
-            var length = ((Tokens.Number)data.First()).Value;
-            var host = new string(data.Skip(1).Take(length).Reverse().Cast<Tokens.Number>().Select(a => (char)a.Value).ToArray());
+            var host = exec.DataStack.Pop<Tokens.PackedBlock>().AsString();
+            exec.DataStack.Push(new TcpStream(host, port));
         }
 
         public static void ReadFile(Executor exec)
         {
-            var data = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
-            var length = ((Tokens.Number)data.First()).Value;
-            var file = new string(data.Skip(1).Take(length).Reverse().Cast<Tokens.Number>().Select(a => (char)a.Value).ToArray());
+            var file = exec.DataStack.Pop<Tokens.PackedBlock>().AsString();
             exec.DataStack.Push(new FileStream(File.Open(file, FileMode.Open, FileAccess.Read)));
         }
 
         public static void WriteFile(Executor exec)
         {
-            var data = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
-            var length = ((Tokens.Number)data.First()).Value;
-            var file = new string(data.Skip(1).Take(length).Reverse().Cast<Tokens.Number>().Select(a => (char)a.Value).ToArray());
+            var file = exec.DataStack.Pop<Tokens.PackedBlock>().AsString();
             exec.DataStack.Push(new FileStream(File.Open(file, FileMode.OpenOrCreate, FileAccess.ReadWrite)));
         }
     }

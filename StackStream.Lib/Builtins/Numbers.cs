@@ -56,6 +56,46 @@ namespace StackStream.Builtins
             exec.DataStack.Push(new Tokens.Number(a & b));
         }
 
+        [Function("%")]
+        public static void Mod(Executor exec)
+        {
+            var b = exec.DataStack.Pop<Tokens.Number>().Value;
+            var a = exec.DataStack.Pop<Tokens.Number>().Value;
+            exec.DataStack.Push(new Tokens.Number(a % b));
+        }
+
+        [Function("<")]
+        public static void LessThan(Executor exec)
+        {
+            var b = exec.DataStack.Pop<Tokens.Number>().Value;
+            var a = exec.DataStack.Pop<Tokens.Number>().Value;
+            exec.DataStack.Push(new Tokens.Number(a < b ? 1 : 0));
+        }
+
+        [Function(">")]
+        public static void MoreThan(Executor exec)
+        {
+            var b = exec.DataStack.Pop<Tokens.Number>().Value;
+            var a = exec.DataStack.Pop<Tokens.Number>().Value;
+            exec.DataStack.Push(new Tokens.Number(a > b ? 1 : 0));
+        }
+
+        [Function("<=")]
+        public static void LessThanEquals(Executor exec)
+        {
+            var b = exec.DataStack.Pop<Tokens.Number>().Value;
+            var a = exec.DataStack.Pop<Tokens.Number>().Value;
+            exec.DataStack.Push(new Tokens.Number(a <= b ? 1 : 0));
+        }
+
+        [Function(">=")]
+        public static void MoreThanEquals(Executor exec)
+        {
+            var b = exec.DataStack.Pop<Tokens.Number>().Value;
+            var a = exec.DataStack.Pop<Tokens.Number>().Value;
+            exec.DataStack.Push(new Tokens.Number(a >= b ? 1 : 0));
+        }
+
         [Function("not")]
         public static void BitwiseNot(Executor exec)
         {
