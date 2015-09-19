@@ -98,8 +98,9 @@ namespace StackStream.IRC
 
                         e.CodeStack.PushRange(Lexer.Parse(message.Substring(2)).Value);
                         string result;
+                        int cyclecount = 0;
                         try {
-                            for (int i = 0; i < 6000 && e.CodeStack.Count > 0; i++)
+                            for (cyclecount = 0; cyclecount < 12000 && e.CodeStack.Count > 0; cyclecount++)
                                 e.Cycle();
                             if (e.CodeStack.Count > 0)
                                 result = "[TIMED OUT]";
@@ -113,9 +114,11 @@ namespace StackStream.IRC
 
                         result = result.Split('\r', '\n')[0];
                         if (result.Length > 0)
-                            writer.WriteLine("PRIVMSG {0} :\u200B{1}", msg[2], result);
+                            writer.WriteLine("PRIVMSG {0} :\u200B({2}) {1}", msg[2], result, cyclecount);
                         if (e.DataStack.Count > 0)
-                            writer.WriteLine("PRIVMSG {0} :\u200BStack: {1}", msg[2], e.DataStack.ToString());
+                            writer.WriteLine("PRIVMSG {0} :\u200B({2}) Stack: {1}", msg[2], e.DataStack.ToString(), cyclecount);
+                        if (result.Length == 0 && e.DataStack.Count == 0)
+                            writer.WriteLine("PRIVMSG {0} :\u200B({1}) [NO RESULT]", msg[2], cyclecount);
                     }
                 }
             }
