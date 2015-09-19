@@ -49,6 +49,51 @@ namespace StackStream
             }
         }
 
+        private string ParseString()
+        {
+            bool escape = false;
+            StringBuilder builder = new StringBuilder();
+
+            while (Pointer < Data.Length && Data[Pointer] != '"')
+                if (Data[Pointer] == '\\')
+                {
+                    escape = true;
+                    Pointer++;
+                }
+                else if (escape)
+                    switch (Data[Pointer])
+                    {
+                        case 'n':
+                            builder.Append('\n');
+                            Pointer++;
+                            break;
+                        case 'r':
+                            builder.Append('\r');
+                            Pointer++;
+                            break;
+                        case 'x':
+                            if (Pointer + 2 < Data.Length)
+                            {
+                                throw new Exception("Not enough data to parse \\x!");
+                            }
+                            else
+                            {
+                                int value = Convert.ToInt32(Data.Substring(Pointer + 1, 2), 16);
+                                builder.Append((char)value);
+                                Pointer += 3;
+                            }
+                            break;
+                        default:
+                            builder.Append(Data[Pointer++]);
+                            break;
+                    }
+                else
+                    builder.Append(Data[Pointer++]);
+            Pointer++;
+
+            return builder.ToString();
+        }
+
         public string Parse()
         {
             SkipWhitespace();
@@ -61,6 +106,11 @@ namespace StackStream
             {
                 Pointer += 2;
                 return Data.Substring(Pointer - 2, 2);
+            }
+            else if (Data[Pointer] == '"')
+            {
+                Pointer++;
+                return "\"" + ParseString();
             }
             else if (Data[Pointer] == '{' || Data[Pointer] == '}' || char.IsSymbol(Data, Pointer))
                 return Data.Substring(Pointer++, 1);
@@ -111,6 +161,10 @@ namespace StackStream
                     break;
                 else if (token == "{")
                     tokens.Add(_Parse(lexer));
+                else if (token[0] == '"')
+                {
+                    tokens.Add(new Tokens.PackedBlock(token.Skip(1).Select(a => new Tokens.Number(a))));
+                }
                 else
                     tokens.Add(new Tokens.Method(token));
             }

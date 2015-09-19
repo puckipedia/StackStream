@@ -73,5 +73,35 @@ namespace StackStream.Builtins
         {
             exec.DataStack.Push(new Tokens.Number(exec.DataStack.Count));
         }
+
+        [Function("pack")]
+        public static void Pack(Executor exec)
+        {
+            var count = exec.DataStack.Pop<Tokens.Number>().Value;
+            List<IToken> Tokens = new List<IToken>();
+            for (int i = 0; i < count; i++)
+            {
+                Tokens.Add(exec.DataStack.Pop<IToken>());
+            }
+
+            exec.DataStack.Push(new Tokens.PackedBlock(Tokens));
+        }
+
+        [Function("unpack")]
+        public static void Unpack(Executor exec)
+        {
+            var block = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
+            var count = block.Count;
+
+            exec.DataStack.PushRange(block);
+            exec.DataStack.Push(new Tokens.Number(count));
+        }
+
+        [Function("pack-size")]
+        public static void PackSize(Executor exec)
+        {
+            var block = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
+            exec.DataStack.Push(new Tokens.Number(block.Count));
+        }
     }
 }

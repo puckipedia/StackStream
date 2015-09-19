@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builtins\Conditional.cs" />
+    <Compile Include="Builtins\FileTcpIo.cs" />
     <Compile Include="Builtins\Numbers.cs" />
     <Compile Include="Builtins\Runtime.cs" />
     <Compile Include="Builtins\Stack.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Tokens\CodeBlock.cs" />
     <Compile Include="Tokens\Method.cs" />
     <Compile Include="Tokens\Number.cs" />
+    <Compile Include="Tokens\PackedBlock.cs" />
     <Compile Include="Tokens\Stream.cs" />
     <Compile Include="Tokens\Symbol.cs" />
   </ItemGroup>

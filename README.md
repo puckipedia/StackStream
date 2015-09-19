@@ -6,7 +6,7 @@ StackStream is an esolang-y stack-based language with streams thrown in, because
 After reading the exam requirements for the (simple) calculator, I found out there's nothing stopping me from making my own and having it use, e.g. rpn. I started making a small RPN language, and slowly grew it (even making a horrible implementation on my TI-84). Then, I started thinking 'what if I added a feature for functions?' and so I did. And because of the 'why not' factor, I decided to implement brainfuck, but hit a snag: I can't store the tape. So I added the streams and buffers. This is now StackStream.
 
 # Syntax
-The syntax of the language is very simple, it contains only five data types 
+The syntax of the language is very simple, it contains only six data types 
  (referred to as 'tokens'):
 
  - `number`: A 32-bit signed integer (might change to a bignum later) e.g. `42`
@@ -16,7 +16,8 @@ The syntax of the language is very simple, it contains only five data types
  - `stream`: A datatype capable of reading and writing, like a FILE *, and
               possibly seeking and arbitrary reading/writing.
  - `codeblock`: A list of tokens, surrounded by "{" and "}" `{ 5 dive }`
-
+ - `packedblock`: A token containing a list of data tokens, as a sort of list.
+              "asdf" pushes a packed block containing (`f `d `s `a 5), etc.
 number, symbol, method, and codeblock can be represented in code. It is not
  possible to represent a stream as a code token.
 
@@ -44,8 +45,8 @@ The representation of stacks in this document are as follows:
 When executing a code block, its contents are pushed onto the code stack. 
  This means that code stack overflows are possible.
 
-  { dup 1 dive { while } if drop } 'while def # Unsafe! Every time 'while' is called, another 'drop' lingers
-  { dup 1 dive { drop } { while } elseif } 'while def # Safe!
+    { dup 1 dive { while } if drop } 'while def # Unsafe! Every time 'while' is called, another 'drop' lingers
+    { dup 1 dive { drop } { while } elseif } 'while def # Safe!
 
 # Built-in methods
 StackStreams contains a list of built-in methods, as those can't be represented
@@ -53,57 +54,67 @@ StackStreams contains a list of built-in methods, as those can't be represented
 
 note: offsets are calculated after popping arguments.
 
-- (+ / - \*): a:number b:number → c:number - Calculates a +/-* b.
-- =: a:number b:number → c:number - If a and b are equal, c is 1, else it is zero.
+- `(+ / - \*)`: a:number b:number → c:number - Calculates a +/-* b.
+- `=`: a:number b:number → c:number - If a and b are equal, c is 1, else it is zero.
 
-- dup: a → a a - duplicates the top item on the stack.
-- drop: a → - drops the top item.
-- dive: a:codeblock N:number → - dives N items into the stack, and executes a. After a is done executing, dives back N items.
-- dig: b ... N:number → ... b - moves an item N items into the stack onto the top.
-- bury: ... a N:number → a ... - moves an item on top of the stack N items into the stack.
-- stack-count: → a:number - Counts the amount of items on the stack.
-- swap: a b → b a - swaps the top two items on the stack.
+- `dup`: a → a a - duplicates the top item on the stack.
+- `drop`: a → - drops the top item.
+- `dive`: a:codeblock N:number → - dives N items into the stack, and executes a. After a is done executing, dives back N items.
+- `dig`: b ... N:number → ... b - moves an item N items into the stack onto the top.
+- `bury`: ... a N:number → a ... - moves an item on top of the stack N items into the stack.
+- `stack-count`: → a:number - Counts the amount of items on the stack.
+- `swap`: a b → b a - swaps the top two items on the stack.
 
-- if: cc:number b:codeblock → - if cc is non-zero, executes b. Else, just pops it from the stack.
-- elseif: cc:number b:codeblock a:codeblock → - if cc is non-zero, executes a. Else, executes b.
+- `if`: cc:number b:codeblock → - if cc is non-zero, executes b. Else, just pops it from the stack.
+- `elseif`: cc:number b:codeblock a:codeblock → - if cc is non-zero, executes a. Else, executes b.
 
-- exec: a:codeblock → - Executes a.
-- def: b:codeblock a:symbol → - Defines a to be a method, which will execute b.
-- assert: a:number → - If a is zero, errors
+- `exec`: a:codeblock → - Executes a.
+- `def`: b:codeblock a:symbol → - Defines a to be a method, which will execute b.
+- `assert`: a:number → - If a is zero, errors
+- `pack`: ... N:number → a:packedblock - Packs the top N items in the stack into a packed block.
+- `unpack`: a:packedblock → ... N:number - Unpacks the packed block, and pushes the size of it on top.
+- `pack-size`: a:packedblock → N:number - pushes the amount of items inside the packed block.
 
-- stdinout: → a:stream - pushes a stream referencing stdin / stdout to the stack.
-- read-stream: a:stream → b:number - reads of the top stream, and returns the value.
-- write-stream: a:stream b:number → - writes b onto stream a.
-- tell-stream: a:stream → b:number - gets the location of the cursor in the stream, if not possible errors.
-- seek-stream: a:stream b:number → - sets the location of the cursor in the stream, if not possible errors.
-- eof-stream: a:stream → b:number - if stream a hit eof, pushes 1, else 0
+- `stdinout`: → a:stream - pushes a stream referencing stdin / stdout to the stack.
+- `read-stream`: a:stream → b:number - reads of the top stream, and returns the value.
+- `write-stream`: a:stream b:number → - writes b onto stream a.
+- `tell-stream`: a:stream → b:number - gets the location of the cursor in the stream, if not possible errors.
+- `seek-stream`: a:stream b:number → - sets the location of the cursor in the stream, if not possible errors.
+- `eof-stream`: a:stream → b:number - if stream a hit eof, pushes 1, else 0
 
-- new-buffer: → a:stream - Creates a new empty buffer, with pointer to location 0.
-- write-buffer: a:stream b:number c:number → - Writes c into location b of the stream.
-- read-buffer: a:stream b:number → c:number - Reads the data at location b of the stream.
+- `new-buffer`: → a:stream - Creates a new empty buffer, with pointer to location 0.
+- `write-buffer`: a:stream b:number c:number → - Writes c into location b of the stream.
+- `read-buffer`: a:stream b:number → c:number - Reads the data at location b of the stream.
+
+Depending on the interpreter, `new-tcpstream`, `read-file` and `write-file` might be available:
+
+- `new-tcpstream`: a:packedblock b:number → c:stream - connects to the host represented by a, and port b.
+- `read-file`: a:packedblock → b:stream - opens the file represented by a, read-only.
+- `write-file`: a:packedblock → b:stream - opens the file represented by a, read-write.
+
 
 
 # Convenience methods
 Some convenience methods are presented, implemented in StackStream itself:
 
-while: a:codeblock → - Executes code block a, and checks the top value of the stack afterwards. If non-zero, loop. (do { } while())
+`while`: a:codeblock → - Executes code block a, and checks the top value of the stack afterwards. If non-zero, loop. (do { } while())
 
     { dup 1 dive swap { drop } { while } elseif } 'while def
 
-compare: a:number b:number → a c:number - Compares a to b, and pushes the result value, while keeping value a intact.
+`compare`: a:number b:number → a c:number - Compares a to b, and pushes the result value, while keeping value a intact.
 
     { swap dup 2 dig = } 'compare def
 
-dig': a ... N:number → a ... a - Digs up an item, but keeps a duplicate of it on its original position
+`dig'`: a ... N:number → a ... a - Digs up an item, but keeps a duplicate of it on its original position
 
     { dup dup -1 * swap 1 + bury { dup 2 dig bury } dive } 'dig' def
 
-stack-check: a:codeblock → - Executes a, but makes sure the stack doesn't change size.
+`stack-check`: a:codeblock → - Executes a, but makes sure the stack doesn't change size.
 
     { stack-count swap 1 dive stack-count = assert } 'stack-check def
 
 # Example code
-cat: (Only gets stdinout once)
+`cat`: (Only gets stdinout once)
 
     stdinout { dup dup dup read-stream write-stream eof-stream } while
 
