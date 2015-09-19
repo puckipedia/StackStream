@@ -31,7 +31,7 @@ namespace StackStream.Tokens
 
         public override string ToString()
         {
-            return "( " + string.Join(" ", Value.Select(a => a.ToString())) + " )";
+            return "( " + string.Join(" ", Value.Select(a => a.ToString()).Reverse()) + " )";
         }
     }
 }
