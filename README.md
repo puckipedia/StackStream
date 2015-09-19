@@ -9,7 +9,7 @@ After reading the exam requirements for the (simple) calculator, I found out the
 The syntax of the language is very simple, it contains only six data types 
  (referred to as 'tokens'):
 
- - `number`: A 32-bit signed integer (might change to a bignum later) e.g. `42`
+ - `number`: An arbitrary large signed integer, e.g. `42`
               Note: \`A is shorthand for `65`.
  - `symbol`: An alphanumeric string starting with ' e.g. `'asdf`
  - `method`: An alphanumeric string not starting with '. `dive`

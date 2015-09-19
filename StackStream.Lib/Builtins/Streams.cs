@@ -49,7 +49,7 @@ namespace StackStream.Builtins
         {
             var value = exec.DataStack.Pop<Tokens.Number>().Value;
             var stream = exec.DataStack.Pop<Tokens.Stream>();
-            if (!stream.Seek(value))
+            if (!stream.Seek((int) value))
                 throw new Exception("seek-stream failed!");
         }
 
@@ -64,7 +64,7 @@ namespace StackStream.Builtins
         {
             var value = exec.DataStack.Pop<Tokens.Number>().Value;
             var stream = exec.DataStack.Pop<Tokens.Stream>();
-            if (!stream.Seek(value))
+            if (!stream.Seek((int) value))
                 throw new Exception("seek-stream failed!");
             exec.DataStack.Push(new Tokens.Number(stream.Read()));
         }
@@ -75,7 +75,7 @@ namespace StackStream.Builtins
             var write = exec.DataStack.Pop<Tokens.Number>().Value;
             var value = exec.DataStack.Pop<Tokens.Number>().Value;
             var stream = exec.DataStack.Pop<Tokens.Stream>();
-            if (!stream.Seek(value))
+            if (!stream.Seek((int) value))
                 throw new Exception("seek-stream failed!");
             stream.Write((byte) write);
         }

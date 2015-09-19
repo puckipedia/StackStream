@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -149,13 +150,13 @@ namespace StackStream
                 var token = lexer.Parse();
                 if (token == null || token.Length == 0)
                     throw new LexerException("Failed to read token");
-                int result;
+                BigInteger result;
 
                 if (token[0] == '\'')
                     tokens.Add(new Tokens.Symbol(token.Substring(1)));
                 else if (token[0] == '`')
                     tokens.Add(new Tokens.Number(token[1]));
-                else if (int.TryParse(token, out result))
+                else if (BigInteger.TryParse(token, out result))
                     tokens.Add(new Tokens.Number(result));
                 else if (token == "}")
                     break;

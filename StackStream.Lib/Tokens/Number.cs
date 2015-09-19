@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,13 +9,13 @@ namespace StackStream.Tokens
 {
     public class Number : IToken
     {
-        public int Value
+        public BigInteger Value
         {
             get;
             private set;
         }
 
-        public Number(int val)
+        public Number(BigInteger val)
         {
             Value = val;
         }

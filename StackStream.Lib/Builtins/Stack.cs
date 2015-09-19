@@ -28,7 +28,7 @@ namespace StackStream.Builtins
             var count = exec.DataStack.Pop<Tokens.Number>().Value;
             var code = exec.DataStack.Pop<Tokens.CodeBlock>().Value;
 
-            exec.DataStack.Dive += count;
+            exec.DataStack.Dive += (int) count;
 
             exec.CodeStack.PushRange(new IToken[] { new Tokens.Number(-count), new Tokens.Method(" dive") });
             exec.CodeStack.PushRange(code);
@@ -38,7 +38,7 @@ namespace StackStream.Builtins
         public static void InternalDive(Executor exec)
         {
             var count = exec.DataStack.Pop<Tokens.Number>().Value;
-            exec.DataStack.Dive += count;
+            exec.DataStack.Dive += (int) count;
         }
 
         [Function("swap")]
@@ -54,7 +54,7 @@ namespace StackStream.Builtins
         public static void Dig(Executor exec)
         {
             var count = exec.DataStack.Pop<Tokens.Number>().Value;
-            var token = exec.DataStack.Dig<IToken>(count);
+            var token = exec.DataStack.Dig<IToken>((int) count);
 
             exec.DataStack.Push(token);
         }
@@ -65,7 +65,7 @@ namespace StackStream.Builtins
             var count = exec.DataStack.Pop<Tokens.Number>().Value;
             var token = exec.DataStack.Pop<IToken>();
 
-            exec.DataStack.Bury(token, count);
+            exec.DataStack.Bury(token, (int) count);
         }
 
         [Function("count-stack")]
