@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,16 +52,35 @@ namespace StackStream.IRC
                 Builder.Append((char) val);
             }
         }
+
+        private class Config
+        {
+            public string host { get; set; }
+            public int port { get; set; }
+            public List<string> connect { get; set; }
+        }
+
         static void Main(string[] args)
         {
-            TcpClient client = new TcpClient("ENTER_ME", 6667);
+            Config config = null;
+            try {
+                config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Could not find config! Rename config.example.json to config.json and edit it.");
+                return;
+            }
+
+            TcpClient client = new TcpClient(config.host, config.port);
             var stream = client.GetStream();
             var writer = new StreamWriter(stream);
             var reader = new StreamReader(stream);
             writer.AutoFlush = true;
-            writer.WriteLine("NICK ENTER_ME");
-            writer.WriteLine("USER ENTER_ME 8 * :ENTER_ME");
-            writer.WriteLine("JOIN #ENTER_ME");
+            foreach (var line in config.connect)
+            {
+                writer.WriteLine(line);
+            }
 
             Executor e = new Executor();
             var stdio = new IRCStdIo();

@@ -1,0 +1,8 @@
+﻿{
+  "host": "irc.freenode.net",
+  "port": 6667,
+  "connect": [
+    "NICK CHANGE_ME",
+    "USER CHANGE_ME 8 * CHANGE_ME",
+  ]
+}
