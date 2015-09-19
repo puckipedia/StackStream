@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Builtins\Conditional.cs" />
     <Compile Include="Builtins\FileTcpIo.cs" />
+    <Compile Include="Builtins\MetaProgramming.cs" />
     <Compile Include="Builtins\Numbers.cs" />
     <Compile Include="Builtins\Runtime.cs" />
     <Compile Include="Builtins\Stack.cs" />

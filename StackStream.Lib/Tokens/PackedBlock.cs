@@ -28,5 +28,10 @@ namespace StackStream.Tokens
         {
             return new PackedBlock(Value.Select(a => a.Duplicate()));
         }
+
+        public override string ToString()
+        {
+            return "( " + string.Join(" ", Value.Select(a => a.ToString())) + " )";
+        }
     }
 }

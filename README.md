@@ -54,7 +54,7 @@ StackStreams contains a list of built-in methods, as those can't be represented
 
 note: offsets are calculated after popping arguments.
 
-- `(+ / - * mod | &)`: a:number b:number → c:number - Calculates a (+ / - \* mod | &) b.
+- `(+ / - * % | &)`: a:number b:number → c:number - Calculates a (+ / - \* % | &) b.
 - `(< > <= >=)`: a: number b:number → c:number - Calculates a (> < >= <=) b.
 - `=`: a:number b:number → c:number - If a and b are equal, c is 1, else it is zero.
 
@@ -112,7 +112,7 @@ Some convenience methods are presented, implemented in StackStream itself:
     { dup { drop drop } { 1 - swap dup 2 dive swap repeat } elseif } 'repeat def
 
 `stack-check`: a:codeblock → - Executes a, but makes sure the stack doesn't change size.
-    { stack-count swap 1 dive stack-count = assert } 'stack-check def
+    { count-stack swap 1 dive count-stack = assert } 'stack-check def
 
 `dropn`: ... N:number → - removes N items from the top of the stack.
     { { drop } swap repeat } 'dropn def
@@ -122,8 +122,8 @@ Some other convenience methods for working with packed blocks:
 `concat-packed`: a:packedblock b:packedblock → c:packedblock - concatenates b at the end (bottom) of a
     { swap { unpack } 1 dive swap { unpack } 1 dive + pack } 'concat-packed def
 
-`bury-packed`: a:packedblock b:number c → d:packedblock - sets the item at b to be c
-    { { unpack } 2 dive swap dup 3 + { drop } swap dive 1 + bury pack } 'bury-packed def
+`replace-packed`: a:packedblock b:number c → d:packedblock - sets the item at b to be c
+    { { unpack } 2 dive swap dup 3 + { drop } swap dive 1 + bury pack } 'replace-packed def
 
 `dig'-packed`: a:packedblock b:number → c - runs dig' inside the packed block, but keeps the original entry.
     { { unpack } 1 dive 1 + dig { 1 - dropn } 1 dive } 'dig'-packed def

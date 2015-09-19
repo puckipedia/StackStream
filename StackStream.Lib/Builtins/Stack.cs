@@ -68,7 +68,7 @@ namespace StackStream.Builtins
             exec.DataStack.Bury(token, count);
         }
 
-        [Function("stack-count")]
+        [Function("count-stack")]
         public static void StackCount(Executor exec)
         {
             exec.DataStack.Push(new Tokens.Number(exec.DataStack.Count));
@@ -97,7 +97,7 @@ namespace StackStream.Builtins
             exec.DataStack.Push(new Tokens.Number(count));
         }
 
-        [Function("pack-size")]
+        [Function("count-packed")]
         public static void PackSize(Executor exec)
         {
             var block = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
