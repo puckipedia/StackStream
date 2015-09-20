@@ -20,10 +20,16 @@ namespace StackStream.Builtins
             var name = exec.DataStack.Pop<Tokens.Symbol>().Value;
             var code = exec.DataStack.Pop<Tokens.CodeBlock>().Value;
 
-            exec.Methods[name] = delegate (Executor exe)
-            {
-                exe.CodeStack.PushRange(code);
-            };
+            exec.Methods[name] = new Executor.CodeblockFunction(code.ToList());
+        }
+
+        [Function("redef")]
+        public static void Redef(Executor exec)
+        {
+            var to = exec.DataStack.Pop<Tokens.Symbol>().Value;
+            var from = exec.DataStack.Pop<Tokens.Symbol>().Value;
+
+            exec.Methods[to] = exec.Methods[from];
         }
 
         [Function("assert")]

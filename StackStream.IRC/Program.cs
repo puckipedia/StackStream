@@ -84,10 +84,10 @@ namespace StackStream.IRC
 
             Executor e = new Executor();
             var stdio = new IRCStdIo();
-            e.Methods["stdinout"] = delegate (Executor exec)
+            e.Methods["stdinout"] = new Executor.NativeFunction(delegate (Executor exec)
             {
                 exec.DataStack.Push(stdio);
-            };
+            });
 
             while (true)
             {
@@ -107,14 +107,14 @@ namespace StackStream.IRC
                         e.CodeStack.Clear();
                         e.DataStack.Clear();
 
-                        e.Methods["reset"] = delegate (Executor exec)
+                        e.Methods["reset"] = new Executor.NativeFunction(delegate (Executor exec)
                         {
                             e = new Executor();
-                            e.Methods["stdinout"] = delegate (Executor execu)
+                            e.Methods["stdinout"] = new Executor.NativeFunction(delegate (Executor execu)
                             {
                                 execu.DataStack.Push(stdio);
-                            };
-                        };
+                            });
+                        });
 
                         e.CodeStack.PushRange(Lexer.Parse(message.Substring(2)).Value);
                         string result;

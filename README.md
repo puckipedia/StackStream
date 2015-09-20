@@ -71,10 +71,13 @@ note: offsets are calculated after popping arguments.
 
 - `exec`: a:codeblock → - Executes a.
 - `def`: b:codeblock a:symbol → - Defines a to be a method, which will execute b.
+- `redef`: a:symbol b:symbol → Defines b to point towards the same method as a.
 - `assert`: a:number → - If a is zero, errors
 - `to-codeblock`: a:packedblock → b:codeblock - Turns a into a codeblock, with the top of the stack being the first executed token.
 - `from-codeblock`: a:codeblock → b:packedblock - Turns a into a packedblock, with the top of the stack being the first executed token.
 - `parse`: a:packedblock → b - Parses the string contained in a into a token.
+
+note: `to-codeblock` and `from-codeblock` can also take a symbol refering to a previously `def`-ed method.
 
 - `pack`: ... N:number → a:packedblock - Packs the top N items in the stack into a packed block.
 - `unpack`: a:packedblock → ... N:number - Unpacks the packed block, and pushes the size of it on top.
@@ -117,7 +120,7 @@ Some convenience methods are presented, implemented in StackStream itself:
 
 `dropn`: ... N:number → - removes N items from the top of the stack.
     { { drop } swap repeat } 'dropn def
-    
+
 Some other convenience methods for working with packed blocks:
 
 `concat-packed`: a:packedblock b:packedblock → c:packedblock - concatenates b at the end (bottom) of a

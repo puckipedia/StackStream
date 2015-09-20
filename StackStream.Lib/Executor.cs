@@ -42,7 +42,7 @@ namespace StackStream
             }
         }
 
-        public class CodeblockFunction
+        public class CodeblockFunction : IFunction
         {
             public List<IToken> Tokens
             {
