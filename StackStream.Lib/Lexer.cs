@@ -73,7 +73,7 @@ namespace StackStream
                             Pointer++;
                             break;
                         case 'x':
-                            if (Pointer + 2 < Data.Length)
+                            if (Pointer + 2 >= Data.Length)
                             {
                                 throw new Exception("Not enough data to parse \\x!");
                             }

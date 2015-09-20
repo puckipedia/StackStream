@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StackStream.Lib.Builtins
+namespace StackStream.Builtins
 {
     public static class FileTcpIo
     {
