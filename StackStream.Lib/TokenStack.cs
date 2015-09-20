@@ -39,6 +39,12 @@ namespace StackStream
             }
         }
 
+        public T Peek<T>()
+            where T : IToken
+        {
+            return (T) _tokens[Dive];
+        }
+
         public T Pop<T>()
             where T : IToken
         {

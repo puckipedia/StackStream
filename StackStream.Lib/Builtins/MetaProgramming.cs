@@ -19,15 +19,37 @@ namespace StackStream.Lib.Builtins
         [Function("to-codeblock")]
         public static void ToCodeblock(Executor exec)
         {
-            var tokens = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
-            exec.DataStack.Push(new Tokens.CodeBlock(tokens));
+            var token = exec.DataStack.Peek<IToken>();
+            if (token is Tokens.PackedBlock)
+            {
+                var tokens = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
+                exec.DataStack.Push(new Tokens.CodeBlock(tokens));
+            }
+            else
+            {
+                var tokens = exec.DataStack.Pop<Tokens.Symbol>().Value;
+                var method = exec.Methods[tokens];
+                var value = ((Executor.CodeblockFunction) method).Tokens;
+                exec.DataStack.Push(new Tokens.CodeBlock(value));
+            }
         }
 
         [Function("from-codeblock")]
         public static void FromCodeblock(Executor exec)
         {
-            var tokens = exec.DataStack.Pop<Tokens.CodeBlock>().Value;
-            exec.DataStack.Push(new Tokens.PackedBlock(tokens));
+            var token = exec.DataStack.Peek<IToken>();
+            if (token is Tokens.CodeBlock)
+            {
+                var tokens = exec.DataStack.Pop<Tokens.CodeBlock>().Value;
+                exec.DataStack.Push(new Tokens.PackedBlock(tokens));
+            }
+            else
+            {
+                var tokens = exec.DataStack.Pop<Tokens.Symbol>().Value;
+                var method = exec.Methods[tokens];
+                var value = ((Executor.CodeblockFunction)method).Tokens;
+                exec.DataStack.Push(new Tokens.PackedBlock(value));
+            }
         }
     }
 }

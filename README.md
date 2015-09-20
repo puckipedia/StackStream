@@ -107,7 +107,7 @@ Some convenience methods are presented, implemented in StackStream itself:
     { swap dup 2 dig = } 'compare def
 
 `dig'`: a ... N:number → a ... a - Digs up an item, but keeps a duplicate of it on its original position
-    { dup 1 + dig dup 2 dig bury } 'dig' def
+    { dup 1 + { dup } swap dive dig } 'dig' def
 
 `repeat`: a:codeblock N:number → ... - Executes a N times.
     { dup { drop drop } { 1 - swap dup 2 dive swap repeat } elseif } 'repeat def
