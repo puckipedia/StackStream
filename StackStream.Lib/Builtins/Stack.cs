@@ -103,5 +103,13 @@ namespace StackStream.Builtins
             var block = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
             exec.DataStack.Push(new Tokens.Number(block.Count));
         }
+
+        [Function("reverse-packed")]
+        public static void ReversePacked(Executor exec)
+        {
+            var block = exec.DataStack.Pop<Tokens.PackedBlock>().Value;
+            block.Reverse();
+            exec.DataStack.Push(new Tokens.PackedBlock(block));
+        }
     }
 }

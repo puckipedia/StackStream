@@ -82,6 +82,7 @@ note: `to-codeblock` and `from-codeblock` can also take a symbol refering to a p
 - `pack`: ... N:number → a:packedblock - Packs the top N items in the stack into a packed block.
 - `unpack`: a:packedblock → ... N:number - Unpacks the packed block, and pushes the size of it on top.
 - `count-packed`: a:packedblock → N:number - pushes the amount of items inside the packed block.
+- `reverse-packed`: a:packedblock → b:packedblock - reverses the packedblock on top of the stack.
 
 - `stdinout`: → a:stream - pushes a stream referencing stdin / stdout to the stack.
 - `read-stream`: a:stream → b:number - reads of the top stream, and returns the value.

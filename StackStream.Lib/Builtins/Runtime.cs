@@ -32,6 +32,12 @@ namespace StackStream.Builtins
             exec.Methods[to] = exec.Methods[from];
         }
 
+        [Function("debug")]
+        public static void Debug(Executor exec)
+        {
+            System.Diagnostics.Debug.WriteLine("Data: {0}\nCode: {1}", exec.DataStack.ToString(), exec.CodeStack.ToString());
+        }
+
         [Function("assert")]
         public static void Assert(Executor exec)
         {
