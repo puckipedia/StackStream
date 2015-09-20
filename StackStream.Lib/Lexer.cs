@@ -113,7 +113,7 @@ namespace StackStream
                 Pointer++;
                 return "\"" + ParseString();
             }
-            else if (Data[Pointer] == '{' || Data[Pointer] == '}' || char.IsSymbol(Data, Pointer))
+            else if (Data[Pointer] == '{' || Data[Pointer] == '}')
                 return Data.Substring(Pointer++, 1);
 
             return TakeUntilWhitespace();
