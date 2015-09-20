@@ -17,7 +17,7 @@ The syntax of the language is very simple, it contains only six data types
               possibly seeking and arbitrary reading/writing.
  - `codeblock`: A list of tokens, surrounded by "{" and "}" `{ 5 dive }`
  - `packedblock`: A token containing a list of data tokens, as a sort of list.
-              "asdf" pushes a packed block containing (`f `d `s `a 5), etc.
+              "asdf" pushes a packed block containing `(\`f \`d \`s \`a)`, etc.
 number, symbol, method, and codeblock can be represented in code. It is not
  possible to represent a stream as a code token.
 
