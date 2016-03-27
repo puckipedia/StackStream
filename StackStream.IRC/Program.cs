@@ -15,7 +15,7 @@ namespace StackStream.IRC
         {
             public IRCStdIo()
             {
-                Builder = new StringBuilder();
+                Builder = new MemoryStream();
             }
 
             public override bool IsEOF
@@ -26,7 +26,7 @@ namespace StackStream.IRC
                 }
             }
 
-            public StringBuilder Builder
+            public MemoryStream Builder
             {
                 get;
                 private set;
@@ -49,7 +49,7 @@ namespace StackStream.IRC
 
             public override void Write(byte val)
             {
-                Builder.Append((char) val);
+                Builder.WriteByte(val);
             }
         }
 
@@ -103,7 +103,8 @@ namespace StackStream.IRC
                     string message = string.Join(" ", msg.Skip(3)).Substring(1);
                     if (message.StartsWith("~{"))
                     {
-                        stdio.Builder.Clear();
+                        stdio.Builder.SetLength(0);
+
                         e.CodeStack.Clear();
                         e.DataStack.Clear();
 
@@ -125,7 +126,13 @@ namespace StackStream.IRC
                             if (e.CodeStack.Count > 0)
                                 result = "[TIMED OUT]";
                             else
-                                result = stdio.Builder.ToString();
+                                try {
+                                    result = Encoding.UTF8.GetString(stdio.Builder.ToArray());
+                                }
+                                catch (ArgumentException)
+                                {
+                                    result = string.Join("", stdio.Builder.ToArray().Select(a => new string((char) a, 1)));
+                                }
                         }
                         catch (Exception ex)
                         {

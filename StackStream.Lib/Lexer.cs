@@ -164,7 +164,7 @@ namespace StackStream
                     tokens.Add(_Parse(lexer));
                 else if (token[0] == '"')
                 {
-                    tokens.Add(new Tokens.PackedBlock(token.Skip(1).Select(a => new Tokens.Number(a))));
+                    tokens.Add(new Tokens.PackedBlock(Encoding.UTF8.GetBytes(token.Substring(1)).Select(a => new Tokens.Number(a))));
                 }
                 else
                     tokens.Add(new Tokens.Method(token));
