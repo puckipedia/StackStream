@@ -82,13 +82,8 @@ namespace StackStream
             "{ swap dup 2 dig = } 'compare def",
             "{ dup 1 + { dup } swap dive dig } 'dig' def",
             "{ dup { drop drop } { 1 - swap dup 2 dive swap repeat } elseif } 'repeat def",
-            "{ count-stack swap 1 dive count-stack = assert } 'stack-check def",
+            "{ stack-size swap 1 dive stack-size = assert } 'stack-check def",
             "{ { drop } swap repeat } 'dropn def",
-            "{ swap { unpack } 1 dive swap { unpack } 1 dive + pack } 'concat-packed def",
-            "{ { unpack } 2 dive swap dup 3 + { drop } swap dive 1 + bury pack } 'replace-packed def",
-            "{ { unpack } 1 dive 1 + dig { 1 - dropn } 1 dive } 'dig'-packed def",
-            "{ dup { { 'uninitialised-element } swap repeat } 1 dive pack } 'new-packed def",
-            "{ { unpack } 1 dive dup { - pack } 1 dive swap { dropn } 1 dive } 'shrink-packed def",
         };
 
         public Dictionary<string, IFunction> Methods

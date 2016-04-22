@@ -84,7 +84,7 @@ namespace StackStream.IRC
 
             Executor e = new Executor();
             var stdio = new IRCStdIo();
-            e.Methods["stdinout"] = new Executor.NativeFunction(delegate (Executor exec)
+            e.Methods["stream-stdio"] = new Executor.NativeFunction(delegate (Executor exec)
             {
                 exec.DataStack.Push(stdio);
             });
@@ -111,7 +111,7 @@ namespace StackStream.IRC
                         e.Methods["reset"] = new Executor.NativeFunction(delegate (Executor exec)
                         {
                             e = new Executor();
-                            e.Methods["stdinout"] = new Executor.NativeFunction(delegate (Executor execu)
+                            e.Methods["stream-stdio"] = new Executor.NativeFunction(delegate (Executor execu)
                             {
                                 execu.DataStack.Push(stdio);
                             });

@@ -16,7 +16,7 @@ namespace StackStream.Lib.Builtins
             exec.DataStack.Push(result);
         }
 
-        [Function("to-codeblock")]
+        [Function("codeblock-make")]
         public static void ToCodeblock(Executor exec)
         {
             var token = exec.DataStack.Peek<IToken>();
@@ -34,7 +34,7 @@ namespace StackStream.Lib.Builtins
             }
         }
 
-        [Function("from-codeblock")]
+        [Function("codeblock-pack")]
         public static void FromCodeblock(Executor exec)
         {
             var token = exec.DataStack.Peek<IToken>();
